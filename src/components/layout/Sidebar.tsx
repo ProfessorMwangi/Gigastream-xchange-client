@@ -54,11 +54,8 @@ const mainSections: NavSection[] = [
 	},
 ];
 
-interface SidebarProps {
-	userRole?: "agent" | "media_owner";
-}
-
-export function Sidebar({ userRole = "agent" }: SidebarProps) {
+// eslint-disable-next-line no-empty-pattern
+export function Sidebar() {
 	const { isCollapsed, setIsCollapsed } = useSidebar();
 	const [expandedSections, setExpandedSections] = useState<{
 		[key: string]: boolean;
@@ -198,7 +195,7 @@ export function Sidebar({ userRole = "agent" }: SidebarProps) {
 			{/* Bottom Info */}
 			{!isCollapsed && (
 				<div className='p-4 border-t border-gray-200'>
-					<div className='bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4'>
+					<div className='bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl p-4'>
 						<div className='flex items-center gap-2 mb-2'>
 							<Zap className='w-4 h-4 text-blue-600' />
 							<p className='text-xs font-bold text-gray-900 tracking-wide'>
