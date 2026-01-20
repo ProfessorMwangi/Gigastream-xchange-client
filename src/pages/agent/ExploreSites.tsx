@@ -458,6 +458,37 @@ export function ExploreSites() {
     });
   };
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl/Cmd + K: Focus search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector<HTMLInputElement>('input[type="text"]')?.focus();
+      }
+      // Ctrl/Cmd + A: Add all visible
+      if ((e.ctrlKey || e.metaKey) && e.key === 'a' && e.shiftKey) {
+        e.preventDefault();
+        addAllToCart();
+      }
+      // Escape: Close side panel
+      if (e.key === 'Escape') {
+        setShowSidePanel(false);
+        setCompareMode(false);
+      }
+      // C: Toggle compare mode
+      if (e.key === 'c' && !e.ctrlKey && !e.metaKey) {
+        const target = e.target as HTMLElement;
+        if (target.tagName !== 'INPUT') {
+          setCompareMode(prev => !prev);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Calculate total monthly cost for selected sites
   const cartSites = mockSites.filter(site => cart.includes(site.id));
   const totalMonthly = cartSites.reduce((sum, site) => sum + site.pricing.monthly, 0);
