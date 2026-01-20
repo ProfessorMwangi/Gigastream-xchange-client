@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
@@ -359,7 +359,7 @@ export function ExploreSites() {
     });
   };
 
-  const addAllToCart = () => {
+  const addAllToCart = useCallback(() => {
     const availableSites = filteredSites.filter(s => s.availability === 'available').map(s => s.id);
     setCart(prev => {
       const newItems = availableSites.filter(id => !prev.includes(id));
@@ -368,7 +368,7 @@ export function ExploreSites() {
       }
       return [...new Set([...prev, ...availableSites])];
     });
-  };
+  }, [filteredSites]);
 
   const handleRecenter = () => {
     setMapCenter([-1.2921, 36.8219]);
@@ -487,7 +487,7 @@ export function ExploreSites() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [addAllToCart]);
 
   // Calculate total monthly cost for selected sites
   const cartSites = mockSites.filter(site => cart.includes(site.id));
@@ -543,91 +543,315 @@ export function ExploreSites() {
               </Button>
             </div>
 
-            {/* Cart Counter */}
-            {cart.length > 0 && (
-              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
-                <span className="text-sm font-semibold text-blue-900 tracking-wide">
-                  {cart.length} {cart.length === 1 ? 'site' : 'sites'} selected
-                </span>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium">
-                  Add to Campaign
-                </Button>
+            {/* Quick Filter Chips & Actions */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 flex-wrap">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSortBy('visibility')}
+                  className={clsx(
+                    "px-3 py-1.5 text-xs font-medium rounded-lg transition-all tracking-wide",
+                    sortBy === 'visibility'
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  )}
+                >
+                  <Star className="w-3 h-3 inline mr-1" />
+                  Top Rated
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSortBy('traffic')}
+                  className={clsx(
+                    "px-3 py-1.5 text-xs font-medium rounded-lg transition-all tracking-wide",
+                    sortBy === 'traffic'
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  )}
+                >
+                  <TrendingUp className="w-3 h-3 inline mr-1" />
+                  High Traffic
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSortBy('price')}
+                  className={clsx(
+                    "px-3 py-1.5 text-xs font-medium rounded-lg transition-all tracking-wide",
+                    sortBy === 'price'
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  )}
+                >
+                  <ArrowUpDown className="w-3 h-3 inline mr-1" />
+                  Price
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setFilters({ ...filters, availability: 'available' })}
+                  className={clsx(
+                    "px-3 py-1.5 text-xs font-medium rounded-lg transition-all tracking-wide",
+                    filters.availability === 'available'
+                      ? "bg-green-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  )}
+                >
+                  <CheckCircle2 className="w-3 h-3 inline mr-1" />
+                  Available Now
+                </motion.button>
               </div>
-            )}
+
+              {/* Bulk Actions */}
+              <div className="flex items-center justify-between text-xs text-gray-600">
+                <span className="tracking-wide">{filteredSites.length} inventories found</span>
+                <button
+                  onClick={addAllToCart}
+                  className="text-blue-600 hover:text-blue-700 font-medium tracking-wide hover:underline"
+                >
+                  Add all visible
+                </button>
+              </div>
+
+              {/* Price Range Slider */}
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-gray-700 tracking-wide">
+                  Monthly Budget: KES {priceRange[0].toLocaleString()} - {priceRange[1].toLocaleString()}
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="600000"
+                  step="10000"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                />
+              </div>
+            </div>
+
+            {/* Cart Counter */}
+            <AnimatePresence>
+              {cart.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center justify-between p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200"
+                >
+                  <span className="text-sm font-semibold text-blue-900 tracking-wide">
+                    {cart.length} {cart.length === 1 ? 'inventory' : 'inventories'} selected
+                  </span>
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-lg">
+                    <Zap className="w-3 h-3 mr-1" />
+                    Create Campaign
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Scrollable Inventory List */}
           <div className="flex-1 overflow-y-auto">
-            {filteredSites.map((site) => (
-              <div
-                key={site.id}
-                className={clsx(
-                  'p-5 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors',
-                  selectedSite === site.id && 'bg-blue-50 hover:bg-blue-50'
-                )}
-                onClick={() => {
-                  setSelectedSite(site.id);
-                  setShowSidePanel(true);
-                }}
-              >
-                <div className="flex gap-4">
-                  {/* Checkbox */}
-                  <div className="pt-1">
-                    <input
-                      type="checkbox"
-                      checked={cart.includes(site.id)}
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        toggleCart(site.id);
+            <AnimatePresence>
+              {filteredSites.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-center justify-center h-full p-8 text-center"
+                >
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <Eye className="w-12 h-12 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No inventories found</h3>
+                  <p className="text-sm text-gray-600 mb-4">Try adjusting your filters or search query</p>
+                  <Button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setFilters({ type: 'all', county: 'all', availability: 'all' });
+                      setPriceRange([0, 600000]);
+                    }}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Reset Filters
+                  </Button>
+                </motion.div>
+              ) : (
+                filteredSites.map((site, index) => {
+                  // Prepare mini chart data for traffic
+                  const trafficChartData = [
+                    { value: site.trafficData.dailyImpressions * 0.7 },
+                    { value: site.trafficData.dailyImpressions * 0.85 },
+                    { value: site.trafficData.dailyImpressions * 0.95 },
+                    { value: site.trafficData.dailyImpressions },
+                    { value: site.trafficData.dailyImpressions * 1.1 },
+                  ];
+
+                  return (
+                    <motion.div
+                      key={site.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      onMouseEnter={() => setHoveredSite(site.id)}
+                      onMouseLeave={() => setHoveredSite(null)}
+                      className={clsx(
+                        'p-5 border-b border-gray-200 cursor-pointer transition-all duration-200 relative group',
+                        selectedSite === site.id && 'bg-blue-50 hover:bg-blue-50',
+                        hoveredSite === site.id && 'bg-linear-to-r from-gray-50 to-transparent shadow-sm'
+                      )}
+                      onClick={() => {
+                        setSelectedSite(site.id);
+                        setShowSidePanel(true);
                       }}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                  </div>
+                    >
+                      {/* Availability Pulse Badge */}
+                      {site.availability === 'available' && (
+                        <div className="absolute top-3 right-3">
+                          <div className="relative">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping opacity-75"></div>
+                          </div>
+                        </div>
+                      )}
 
-                  {/* Thumbnail */}
-                  <div className="w-24 h-18 shrink-0 rounded-xl overflow-hidden bg-gray-100">
-                    <img
-                      src={site.photos[0]}
-                      alt={site.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                      <div className="flex gap-4">
+                        {/* Checkbox */}
+                        <div className="pt-1 z-10">
+                          <motion.input
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            type="checkbox"
+                            checked={cart.includes(site.id)}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              toggleCart(site.id);
+                            }}
+                            className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </div>
 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-semibold text-sm text-gray-900 truncate tracking-wide">{site.name}</h3>
-                      <Badge
-                        variant={site.availability === 'available' ? 'success' : 'warning'}
-                        size="sm"
-                        className="shrink-0"
-                      >
-                        {site.availability === 'available' ? 'Available' : 'Dayparted'}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-gray-600 mb-2.5 leading-relaxed">{site.location.address}</p>
+                        {/* Thumbnail with Gradient Overlay */}
+                        <div className="w-24 h-18 shrink-0 rounded-xl overflow-hidden bg-gray-100 relative group-hover:shadow-md transition-shadow">
+                          <img
+                            src={site.photos[0]}
+                            alt={site.name}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                        </div>
 
-                    <div className="flex items-center gap-3 text-xs text-gray-500 font-medium">
-                      <span className="flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        <span className="tracking-wide">{(site.trafficData.dailyImpressions / 1000).toFixed(0)}K</span>
-                        <InfoTooltip text="Daily Impressions: The estimated number of people who will see your advertisement at this location every day, based on foot and vehicle traffic patterns." />
-                      </span>
-                      <span>•</span>
-                      <span className="capitalize tracking-wide">{site.type}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1 tracking-wide">
-                        Score: {site.visibilityScore}
-                        <InfoTooltip text="Visibility Score: A rating from 0-100 that measures how easily your ad can be seen. Factors include viewing angle, distance from road, lighting, and surrounding obstructions." />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <h3 className="font-semibold text-sm text-gray-900 truncate tracking-wide group-hover:text-blue-600 transition-colors">
+                              {site.name}
+                            </h3>
+                            <Badge
+                              variant={site.availability === 'available' ? 'success' : 'warning'}
+                              size="sm"
+                              className="shrink-0"
+                            >
+                              {site.availability === 'available' ? 'Available' : 'Dayparted'}
+                            </Badge>
+                          </div>
+
+                          <p className="text-xs text-gray-600 mb-2.5 leading-relaxed">{site.location.address}</p>
+
+                          {/* Stats with Icons */}
+                          <div className="flex items-center gap-3 text-xs text-gray-500 font-medium mb-2">
+                            <span className="flex items-center gap-1">
+                              <Eye className="w-3.5 h-3.5" />
+                              <span className="tracking-wide">{(site.trafficData.dailyImpressions / 1000).toFixed(0)}K</span>
+                              <InfoTooltip text="Daily Impressions: The estimated number of people who will see your advertisement at this location every day." />
+                            </span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={clsx(
+                                    'w-3 h-3',
+                                    i < Math.round(site.visibilityScore / 20)
+                                      ? 'text-yellow-400 fill-yellow-400'
+                                      : 'text-gray-300'
+                                  )}
+                                />
+                              ))}
+                              <span className="ml-1 tracking-wide">{site.visibilityScore}</span>
+                              <InfoTooltip text="Visibility Score: Rating from 0-100 measuring ad visibility based on viewing angle, distance, lighting, and obstructions." />
+                            </span>
+                          </div>
+
+                          {/* Mini Traffic Chart */}
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-8">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={trafficChartData}>
+                                  <Area
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke="#3b82f6"
+                                    fill="#3b82f6"
+                                    fillOpacity={0.2}
+                                    strokeWidth={1.5}
+                                  />
+                                </AreaChart>
+                              </ResponsiveContainer>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs font-bold text-gray-900">
+                                KES {(site.pricing.monthly / 1000).toFixed(0)}K
+                              </p>
+                              <p className="text-xs text-gray-500">/month</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Hover Preview Tooltip */}
+                      <AnimatePresence>
+                        {hoveredSite === site.id && (
+                          <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            className="absolute left-full top-0 ml-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 pointer-events-none"
+                          >
+                            <img
+                              src={site.photos[0]}
+                              alt={site.name}
+                              className="w-full h-32 object-cover rounded-lg mb-3"
+                            />
+                            <h4 className="font-semibold text-sm mb-2">{site.name}</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Daily Traffic:</span>
+                                <span className="font-medium">{site.trafficData.dailyImpressions.toLocaleString()}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Dimensions:</span>
+                                <span className="font-medium">
+                                  {site.dimensions.width} x {site.dimensions.height} {site.dimensions.unit}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Peak Hours:</span>
+                                <span className="font-medium">{site.trafficData.peakHours[0]}</span>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -1016,6 +1240,21 @@ export function ExploreSites() {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#1f2937',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+        }}
+      />
     </div>
   );
 }
