@@ -278,30 +278,96 @@ export function ExploreSites() {
   const [compareMode, setCompareMode] = useState(false);
   const [compareList, setCompareList] = useState<string[]>([]);
 
-  const filteredSites = mockSites.filter((site) => {
-    if (searchQuery && !site.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    if (filters.type !== 'all' && site.type !== filters.type) {
-      return false;
-    }
-    if (filters.county !== 'all' && site.location.county !== filters.county) {
-      return false;
-    }
-    if (filters.availability !== 'all' && site.availability !== filters.availability) {
-      return false;
-    }
-    return true;
-  });
+  const filteredSites = mockSites
+    .filter((site) => {
+      if (searchQuery && !site.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      if (filters.type !== 'all' && site.type !== filters.type) {
+        return false;
+      }
+      if (filters.county !== 'all' && site.location.county !== filters.county) {
+        return false;
+      }
+      if (filters.availability !== 'all' && site.availability !== filters.availability) {
+        return false;
+      }
+      // Price range filter
+      if (site.pricing.monthly < priceRange[0] || site.pricing.monthly > priceRange[1]) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      // Sort logic
+      switch (sortBy) {
+        case 'price':
+          return a.pricing.monthly - b.pricing.monthly;
+        case 'traffic':
+          return b.trafficData.dailyImpressions - a.trafficData.dailyImpressions;
+        case 'visibility':
+          return b.visibilityScore - a.visibilityScore;
+        default:
+          return 0;
+      }
+    });
 
   const selectedSiteData = selectedSite ? mockSites.find(s => s.id === selectedSite) : null;
 
   const toggleCart = (siteId: string) => {
-    setCart(prev =>
-      prev.includes(siteId)
+    setCart(prev => {
+      const isAdding = !prev.includes(siteId);
+      const newCart = prev.includes(siteId)
         ? prev.filter(id => id !== siteId)
-        : [...prev, siteId]
-    );
+        : [...prev, siteId];
+
+      // Show toast notification
+      if (isAdding) {
+        toast.success('Added to campaign', {
+          icon: '✓',
+          style: {
+            borderRadius: '12px',
+            background: '#10b981',
+            color: '#fff',
+          },
+        });
+      } else {
+        toast('Removed from campaign', {
+          icon: '−',
+          style: {
+            borderRadius: '12px',
+            background: '#6b7280',
+            color: '#fff',
+          },
+        });
+      }
+
+      return newCart;
+    });
+  };
+
+  const toggleCompare = (siteId: string) => {
+    setCompareList(prev => {
+      if (prev.includes(siteId)) {
+        return prev.filter(id => id !== siteId);
+      }
+      if (prev.length >= 3) {
+        toast.error('Maximum 3 inventories for comparison');
+        return prev;
+      }
+      return [...prev, siteId];
+    });
+  };
+
+  const addAllToCart = () => {
+    const availableSites = filteredSites.filter(s => s.availability === 'available').map(s => s.id);
+    setCart(prev => {
+      const newItems = availableSites.filter(id => !prev.includes(id));
+      if (newItems.length > 0) {
+        toast.success(`Added ${newItems.length} inventories to campaign`);
+      }
+      return [...new Set([...prev, ...availableSites])];
+    });
   };
 
   const handleRecenter = () => {
