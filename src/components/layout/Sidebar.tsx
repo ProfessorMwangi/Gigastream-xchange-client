@@ -16,6 +16,7 @@ import {
 	BarChart3,
 	Zap,
 	Calendar,
+	Settings,
 } from "lucide-react";
 
 interface NavItem {
@@ -52,9 +53,14 @@ const mainSections: NavSection[] = [
 			{ name: "Booking History", href: "/history", icon: Calendar },
 		],
 	},
+	{
+		title: "Preferences",
+		items: [
+			{ name: "Settings", href: "/settings", icon: Settings },
+		],
+	},
 ];
 
-// eslint-disable-next-line no-empty-pattern
 export function Sidebar() {
 	const { isCollapsed, setIsCollapsed } = useSidebar();
 	const [expandedSections, setExpandedSections] = useState<{
@@ -63,6 +69,7 @@ export function Sidebar() {
 		Dashboard: true,
 		"Campaign Planning": true,
 		Reports: true,
+		Preferences: true,
 	});
 
 	const toggleSection = (title: string) => {
@@ -75,11 +82,11 @@ export function Sidebar() {
 	return (
 		<aside
 			className={clsx(
-				"fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
+				"fixed inset-y-0 left-0 z-50 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 flex flex-col transition-all duration-300",
 				isCollapsed ? "w-20" : "w-72",
 			)}>
 			{/* Logo */}
-			<div className='h-20 flex items-center justify-between px-5 border-b border-gray-200'>
+			<div className='h-20 flex items-center justify-between px-5 border-b border-gray-200 dark:border-slate-800'>
 				{!isCollapsed && (
 					<div className='flex items-center gap-3'>
 						<div className="w-48 h-16 bg-linear-to-br from-blue-800 via-purple-900 to-pink-700 rounded-xl shadow-lg">
@@ -102,14 +109,14 @@ export function Sidebar() {
 				<button
 					onClick={() => setIsCollapsed(!isCollapsed)}
 					className={clsx(
-						"p-2 hover:bg-gray-100 rounded-lg transition-colors",
+						"p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors",
 						isCollapsed &&
-							"absolute -right-3 top-6 bg-white border border-gray-200 shadow-md",
+							"absolute -right-3 top-6 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 shadow-md",
 					)}>
 					{isCollapsed ? (
-						<ChevronRight className='w-4 h-4 text-gray-600' />
+						<ChevronRight className='w-4 h-4 text-gray-600 dark:text-gray-400' />
 					) : (
-						<ChevronLeft className='w-4 h-4 text-gray-600' />
+						<ChevronLeft className='w-4 h-4 text-gray-600 dark:text-gray-400' />
 					)}
 				</button>
 			</div>
@@ -122,7 +129,7 @@ export function Sidebar() {
 						{!isCollapsed && (
 							<button
 								onClick={() => toggleSection(section.title)}
-								className='w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold text-gray-500 uppercase tracking-wider hover:bg-gray-50 rounded-lg transition-colors'>
+								className='w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors'>
 								<span>{section.title}</span>
 								<ChevronDown
 									className={clsx(
@@ -155,8 +162,8 @@ export function Sidebar() {
 													? "justify-center"
 													: "",
 												isActive
-													? "bg-blue-50 text-blue-700 shadow-sm"
-													: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+													? "bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 shadow-sm"
+													: "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white",
 											)
 										}>
 										{({ isActive }) => (
@@ -165,15 +172,15 @@ export function Sidebar() {
 													className={clsx(
 														"p-2 rounded-lg transition-colors shrink-0",
 														isActive
-															? "bg-blue-100"
-															: "bg-gray-100",
+															? "bg-blue-100 dark:bg-slate-700"
+															: "bg-gray-100 dark:bg-slate-800",
 													)}>
 													<item.icon
 														className={clsx(
 															"w-4 h-4",
 															isActive
-																? "text-blue-700"
-																: "text-gray-600",
+																? "text-blue-700 dark:text-cyan-400"
+																: "text-gray-600 dark:text-gray-400",
 														)}
 													/>
 												</div>
@@ -194,15 +201,15 @@ export function Sidebar() {
 
 			{/* Bottom Info */}
 			{!isCollapsed && (
-				<div className='p-4 border-t border-gray-200'>
-					<div className='bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl p-4'>
+				<div className='p-4 border-t border-gray-200 dark:border-slate-800'>
+					<div className='bg-linear-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-4'>
 						<div className='flex items-center gap-2 mb-2'>
-							<Zap className='w-4 h-4 text-blue-600' />
-							<p className='text-xs font-bold text-gray-900 tracking-wide'>
+							<Zap className='w-4 h-4 text-blue-600 dark:text-cyan-400' />
+							<p className='text-xs font-bold text-gray-900 dark:text-white tracking-wide'>
 								Digital Inventories Kenya
 							</p>
 						</div>
-						<p className='text-xs text-gray-600 leading-relaxed'>
+						<p className='text-xs text-gray-600 dark:text-gray-400 leading-relaxed'>
 							Plan your campaign, we handle the rest
 						</p>
 					</div>

@@ -2,6 +2,8 @@
 @import 'leaflet/dist/leaflet.css';
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Premium Color Palette */
   --color-primary-50: #f8fafc;
@@ -50,6 +52,26 @@
   --color-error-500: #ef4444;
   --color-error-600: #dc2626;
 
+  /* Cyan Neon for Dark Mode */
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+
+  /* Pink Neon for Dark Mode */
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+
+  /* Purple Neon for Dark Mode */
+  --color-purple-400: #c084fc;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+
+  /* Orange Neon for Dark Mode */
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+
   /* Premium Fonts - Inter for body, Poppins for headings */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Poppins', system-ui, sans-serif;
@@ -67,6 +89,10 @@ body {
   font-family: var(--font-sans);
   letter-spacing: -0.011em;
   font-weight: 400;
+}
+
+.dark body {
+  @apply bg-slate-950 text-gray-100;
 }
 
 #root {
@@ -97,14 +123,26 @@ h2 {
   @apply bg-gray-50;
 }
 
+.dark ::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-300 rounded-full;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-600;
 }
 
 /* Smooth animations */
@@ -128,6 +166,11 @@ h2 {
   backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 /* Premium shadows */

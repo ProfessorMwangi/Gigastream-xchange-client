@@ -3,3 +3,4 @@ export { Card, CardHeader, CardTitle, CardDescription } from './Card';
 export { Badge } from './Badge';
 export { Input } from './Input';
 export { Select } from './Select';
+export { ThemeToggle } from './ThemeToggle';
