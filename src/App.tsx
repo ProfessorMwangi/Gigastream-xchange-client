@@ -8,6 +8,10 @@ import { Login } from './pages/auth/Login';
 // Pages
 import { AgentDashboard } from './pages/agent/Dashboard';
 import { CampaignBuilder } from './pages/agent/CampaignBuilder';
+import { Campaigns } from './pages/agent/Campaigns';
+import { QuickQuote } from './pages/agent/QuickQuote';
+import { Analytics } from './pages/agent/Analytics';
+import { BookingHistory } from './pages/agent/BookingHistory';
 import { ExploreSites } from './pages/agent/ExploreSites';
 
 function App() {
@@ -29,13 +33,13 @@ function App() {
 
                   {/* Campaign Planning */}
                   <Route path="/explore" element={<ExploreSites />} />
-                  <Route path="/campaigns" element={<AgentDashboard />} />
+                  <Route path="/campaigns" element={<Campaigns />} />
                   <Route path="/campaigns/new" element={<CampaignBuilder />} />
-                  <Route path="/quote" element={<AgentDashboard />} />
+                  <Route path="/quote" element={<QuickQuote />} />
 
                   {/* Reports */}
-                  <Route path="/analytics" element={<AgentDashboard />} />
-                  <Route path="/history" element={<AgentDashboard />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/history" element={<BookingHistory />} />
 
                   {/* Default redirect */}
                   <Route path="/" element={<Navigate to="/dashboard" replace />} />
