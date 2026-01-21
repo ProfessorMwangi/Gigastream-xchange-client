@@ -5,15 +5,14 @@ import { useSidebar } from '../../contexts/SidebarContext';
 
 interface AppShellProps {
   children: ReactNode;
-  userRole?: 'agent' | 'media_owner';
 }
 
-export function AppShell({ children, userRole = 'agent' }: AppShellProps) {
+export function AppShell({ children }: AppShellProps) {
   const { isCollapsed } = useSidebar();
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Sidebar userRole={userRole} />
+      <Sidebar />
       <main
         className={clsx(
           'transition-all duration-300',
