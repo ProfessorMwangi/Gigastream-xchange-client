@@ -144,7 +144,6 @@ export function Header({ title, subtitle, action }: HeaderProps) {
             <Button
               variant="primary"
               onClick={action.onClick}
-              className="bg-blue-600 dark:bg-cyan-600 hover:bg-blue-700 dark:hover:bg-cyan-700 text-white shadow-lg shadow-blue-600/20 dark:shadow-cyan-600/20"
             >
               {action.label}
             </Button>
