@@ -185,6 +185,8 @@ export function BookingHistory() {
       <div className="p-8 max-w-[1800px] mx-auto space-y-8">
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-500 p-8 text-white shadow-xl">
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+          <div className="absolute inset-0 opacity-20 mix-blend-soft-light" style={{ backgroundImage: 'url(/gradient-noise.png)', backgroundSize: 'cover' }}></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"></div>
 
@@ -201,7 +203,7 @@ export function BookingHistory() {
                 {stats.total} total bookings • {stats.active} active • KES {(stats.totalSpent / 1000000).toFixed(1)}M spent
               </p>
             </div>
-            <Button className="bg-white text-indigo-600 hover:bg-indigo-50 font-semibold">
+            <Button variant="secondary" size="md" className="!bg-white !text-indigo-600 hover:!bg-indigo-50 font-semibold">
               <Download className="w-4 h-4 mr-2" />
               Export History
             </Button>
