@@ -1,12 +1,12 @@
 import { Header } from '../../components/layout';
 import { useTheme } from '../../contexts/ThemeContext';
-import { Sun, Moon, Monitor, Check } from 'lucide-react';
+import { Sun, Moon, Check } from 'lucide-react';
 import clsx from 'clsx';
 
-type ThemeOption = 'light' | 'dark' | 'system';
+type ThemeOption = 'light' | 'dark';
 
 export function Settings() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const themeOptions: { value: ThemeOption; label: string; icon: typeof Sun; description: string }[] = [
     {
@@ -21,33 +21,16 @@ export function Settings() {
       icon: Moon,
       description: 'Easy on the eyes in low light',
     },
-    {
-      value: 'system',
-      label: 'System',
-      icon: Monitor,
-      description: 'Follows your device settings',
-    },
   ];
 
   const handleThemeChange = (newTheme: ThemeOption) => {
-    if (newTheme === 'system') {
-      // Clear localStorage and use system preference
-      localStorage.removeItem('theme');
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      setTheme(systemTheme);
-      // Force reload to apply system theme
-      window.location.reload();
-    } else {
-      setTheme(newTheme);
-    }
+    setTheme(newTheme);
   };
 
-  // Determine current selection (check if using system preference)
-  const storedTheme = localStorage.getItem('theme');
-  const currentSelection: ThemeOption = storedTheme ? (storedTheme as ThemeOption) : 'system';
+  const currentSelection: ThemeOption = theme;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative transition-colors duration-300">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50/20 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative transition-colors duration-300">
       <Header title="Settings" subtitle="Customize your experience" />
 
       <div className="relative z-10 p-8 max-w-4xl mx-auto">
@@ -118,7 +101,7 @@ export function Settings() {
             <div className="mt-8 pt-8 border-t border-gray-200 dark:border-slate-700">
               <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Preview</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-6 shadow-lg">
+                <div className="relative overflow-hidden rounded-xl bg-linear-to-br from-blue-500 to-purple-600 p-6 shadow-lg">
                   <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
                   <div className="relative text-white">
                     <div className="text-xs font-semibold mb-2 opacity-90">SAMPLE CARD</div>
