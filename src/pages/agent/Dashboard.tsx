@@ -5,14 +5,11 @@ import type { Campaign } from '../../types';
 import {
   CampaignIcon,
   ClockIcon,
-  ReachIcon,
-  MoneyIcon,
-  BillboardIcon,
   SparkleIcon,
   CheckCircleIcon,
 } from '../../components/icons/CustomIcons';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import { TrendingUp, Zap, Users, DollarSign } from 'lucide-react';
+import { TrendingUp, Zap, Users } from 'lucide-react';
 
 // Mock data for charts
 const reachTrendData = [
@@ -128,7 +125,8 @@ export function AgentDashboard() {
           {/* Main Hero Card - Spanning 8 columns */}
           <div className="lg:col-span-8 relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-cyan-600 dark:via-blue-600 dark:to-purple-600 p-10 lg:p-12 shadow-2xl shadow-blue-500/20 dark:shadow-cyan-500/30">
             {/* Overlay Noise */}
-            <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+            <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+            <div className="absolute inset-0 opacity-25 mix-blend-soft-light" style={{ backgroundImage: 'url(/noisy-grad.png)', backgroundSize: 'cover' }}></div>
 
             {/* Animated orbs */}
             <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 dark:bg-cyan-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -151,16 +149,18 @@ export function AgentDashboard() {
               <div className="flex flex-wrap gap-4">
                 <Button
                   onClick={() => navigate('/campaigns/new')}
-                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all px-8 py-4 text-base"
+                  variant="secondary"
+                  size="lg"
+                  className="!bg-white !text-blue-600 hover:!bg-blue-50 font-semibold shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all px-8"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                  <img src="/billboard.svg" alt="" className="w-5 h-5 mr-2" />
                   Create Campaign
                 </Button>
                 <Button
                   onClick={() => navigate('/explore')}
-                  className="bg-white text-indigo-600 hover:bg-white/90 font-semibold shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all px-8 py-4 text-base"
+                  variant="secondary"
+                  size="lg"
+                  className="!bg-white !text-indigo-600 hover:!bg-white/90 font-semibold shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all px-8"
                 >
                   Explore Inventories
                 </Button>
@@ -194,7 +194,7 @@ export function AgentDashboard() {
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-3 bg-blue-500/20 dark:bg-cyan-400/20 backdrop-blur-xl rounded-2xl border border-blue-500/30 dark:border-cyan-400/30">
-                    <ReachIcon className="w-6 h-6 text-blue-600 dark:text-cyan-400" />
+                    <img src="/network-reach.svg" alt="Reach" className="w-6 h-6" />
                   </div>
                   <Badge variant="info" className="bg-blue-500/20 dark:bg-cyan-400/20 text-blue-700 dark:text-cyan-300 border border-blue-500/30 dark:border-cyan-400/30 font-bold backdrop-blur-xl">
                     Live
@@ -236,7 +236,7 @@ export function AgentDashboard() {
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-5">
                 <div className="p-4 bg-gradient-to-br from-blue-500/20 dark:from-cyan-400/20 to-blue-600/20 dark:to-cyan-500/20 backdrop-blur-xl rounded-2xl border border-blue-500/30 dark:border-cyan-400/30 shadow-lg">
-                  <BillboardIcon className="w-7 h-7 text-blue-600 dark:text-cyan-400" />
+                  <img src="/billboard.svg" alt="Billboards" className="w-7 h-7" />
                 </div>
                 <Badge variant="info" className="bg-blue-500/20 dark:bg-cyan-400/20 text-blue-700 dark:text-cyan-300 border border-blue-500/30 dark:border-cyan-400/30 font-bold backdrop-blur-xl px-3 py-1">
                   +12
@@ -274,7 +274,7 @@ export function AgentDashboard() {
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-5">
                 <div className="p-4 bg-gradient-to-br from-purple-500/20 dark:from-purple-400/20 to-purple-600/20 dark:to-purple-500/20 backdrop-blur-xl rounded-2xl border border-purple-500/30 dark:border-purple-400/30 shadow-lg">
-                  <DollarSign className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+                  <img src="/money-spend.svg" alt="Budget" className="w-7 h-7" />
                 </div>
                 <Badge variant="default" className="bg-purple-500/20 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 border border-purple-500/30 dark:border-purple-400/30 font-bold backdrop-blur-xl px-3 py-1">
                   85%
@@ -358,7 +358,7 @@ export function AgentDashboard() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Allocation vs. spending</p>
                   </div>
                   <div className="p-3 bg-purple-500/10 dark:bg-purple-400/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 dark:border-purple-400/20">
-                    <DollarSign className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    <img src="/budget.svg" alt="Budget" className="w-5 h-5" />
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
@@ -394,7 +394,7 @@ export function AgentDashboard() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Best performing regions</p>
                   </div>
                   <div className="p-3 bg-green-500/10 dark:bg-green-400/10 backdrop-blur-xl rounded-2xl border border-green-500/20 dark:border-green-400/20">
-                    <BillboardIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <img src="/billboard.svg" alt="Locations" className="w-5 h-5" />
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
@@ -512,19 +512,19 @@ export function AgentDashboard() {
                       <div className="flex items-center gap-6 text-sm">
                         <div className="flex items-center gap-2">
                           <div className="p-2 bg-blue-500/10 dark:bg-cyan-400/10 backdrop-blur-xl rounded-xl border border-blue-500/20 dark:border-cyan-400/20">
-                            <BillboardIcon className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                            <img src="/billboard.svg" alt="Sites" className="w-4 h-4" />
                           </div>
                           <span className="text-gray-700 dark:text-gray-300 font-semibold">{campaign.sites.length} LED Sites</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="p-2 bg-green-500/10 dark:bg-green-400/10 backdrop-blur-xl rounded-xl border border-green-500/20 dark:border-green-400/20">
-                            <ReachIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            <img src="/network-reach.svg" alt="Reach" className="w-4 h-4" />
                           </div>
                           <span className="text-gray-700 dark:text-gray-300 font-semibold">{(campaign.totalReach / 1000000).toFixed(1)}M Reach</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="p-2 bg-purple-500/10 dark:bg-purple-400/10 backdrop-blur-xl rounded-xl border border-purple-500/20 dark:border-purple-400/20">
-                            <MoneyIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                            <img src="/dollar.svg" alt="Cost" className="w-4 h-4" />
                           </div>
                           <span className="text-gray-700 dark:text-gray-300 font-semibold">KES {(campaign.totalCost / 1000000).toFixed(1)}M</span>
                         </div>
@@ -555,7 +555,8 @@ export function AgentDashboard() {
               className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 dark:from-cyan-600 dark:via-blue-600 dark:to-purple-600 p-8 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
               onClick={() => navigate('/campaigns/new')}
             >
-              <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+              <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+              <div className="absolute inset-0 opacity-15 mix-blend-soft-light" style={{ backgroundImage: 'url(/gradient-noise.png)', backgroundSize: 'cover' }}></div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
 
               <div className="relative z-10 text-white">
@@ -577,7 +578,7 @@ export function AgentDashboard() {
 
               <div className="relative z-10">
                 <div className="p-3 bg-green-500/20 dark:bg-green-400/20 backdrop-blur-xl rounded-2xl border border-green-500/30 dark:border-green-400/30 inline-flex mb-4">
-                  <BillboardIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <img src="/billboard.svg" alt="Sites" className="w-6 h-6" />
                 </div>
                 <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-2">Explore Sites</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">Browse 134+ LED locations</p>
@@ -594,7 +595,7 @@ export function AgentDashboard() {
 
               <div className="relative z-10">
                 <div className="p-3 bg-purple-500/20 dark:bg-purple-400/20 backdrop-blur-xl rounded-2xl border border-purple-500/30 dark:border-purple-400/30 inline-flex mb-4">
-                  <MoneyIcon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  <img src="/budget.svg" alt="Quote" className="w-6 h-6" />
                 </div>
                 <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-2">Quick Quote</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">Get instant pricing estimates</p>
