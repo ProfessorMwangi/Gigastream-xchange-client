@@ -135,6 +135,9 @@ export function CampaignBuilder() {
       <div className="p-8 max-w-[1400px] mx-auto">
         {/* Hero Section with Premium Design */}
         <div className="mb-10 relative overflow-hidden rounded-3xl bg-linear-to-br from-blue-600 via-blue-500 to-accent-500 p-10 text-white shadow-premium-lg">
+          {/* Noise Textures */}
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+          <div className="absolute inset-0 opacity-20 mix-blend-soft-light" style={{ backgroundImage: 'url(/gradient-noise.png)', backgroundSize: 'cover' }}></div>
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-20 w-72 h-72 bg-accent-400/20 rounded-full blur-3xl"></div>
