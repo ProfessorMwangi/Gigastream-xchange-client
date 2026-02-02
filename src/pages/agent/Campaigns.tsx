@@ -140,6 +140,8 @@ export function Campaigns() {
       <div className="p-8 max-w-[1800px] mx-auto space-y-8">
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 text-white shadow-xl">
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ backgroundImage: 'url(/overlay-noise.avif)' }}></div>
+          <div className="absolute inset-0 opacity-20 mix-blend-soft-light" style={{ backgroundImage: 'url(/noisy-grad.png)', backgroundSize: 'cover' }}></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl"></div>
 
