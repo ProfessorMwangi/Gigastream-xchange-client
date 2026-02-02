@@ -444,7 +444,8 @@ export function ExploreSites() {
                 <span className="text-sm font-semibold text-blue-900 tracking-wide">
                   {cart.length} {cart.length === 1 ? 'inventory' : 'inventories'} selected
                 </span>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                <Button size="sm" variant="primary" className="font-medium">
+                  <img src="/billboard.svg" alt="" className="w-4 h-4 mr-1.5" />
                   Add to Campaign
                 </Button>
               </div>
@@ -672,21 +673,17 @@ export function ExploreSites() {
               <Button
                 size="sm"
                 variant="primary"
-                className="flex-1 bg-blue-600 hover:bg-blue-700 font-medium tracking-wide"
+                className="flex-1 font-medium tracking-wide"
                 onClick={() => toggleCart(selectedSiteData.id)}
               >
                 {cart.includes(selectedSiteData.id) ? (
                   <>
-                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
+                    <img src="/done.svg" alt="" className="w-4 h-4 mr-2 brightness-0 invert" />
                     Added to Cart
                   </>
                 ) : (
                   <>
-                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
+                    <img src="/billboard.svg" alt="" className="w-4 h-4 mr-2 brightness-0 invert" />
                     Add to Cart
                   </>
                 )}
@@ -896,11 +893,9 @@ export function ExploreSites() {
                   variant="primary"
                   size="lg"
                   onClick={handleCreateCampaign}
-                  className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 px-8 font-medium tracking-wide"
+                  className="shadow-lg px-8 font-medium tracking-wide"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                  <img src="/billboard.svg" alt="" className="w-5 h-5 mr-2 brightness-0 invert" />
                   Create Campaign
                   <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
